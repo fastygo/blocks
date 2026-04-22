@@ -1,0 +1,19 @@
+---
+description: Blocks — page organisms; may use UI8Kit + Elements
+alwaysApply: true
+---
+
+# Blocks
+
+**Role:** Page **organisms** — hero, pricing section, dashboard regions. Scene-specific composition and layout; may call **UI8Kit primitives directly** and **Elements** widgets.
+
+**Boundaries**
+- **May import** `UI8Kit` and `Elements`. **Must not** be imported by `UI8Kit` or `Elements`.
+- Product / campaign one-offs stay in **app** views, not here, unless they become a reusable family of blocks.
+
+**Growth (avoid premature Elements)**
+1. Repeat inside one block → `internal/` for that block.
+2. Shared across blocks in this module → `pkg/` (or shared subpackage) in **Blocks**.
+3. Stable cross-product widget → **Elements**.
+
+**Naming:** `bl-*` or app-owned prefixes for block-scene CSS; brand-only styling stays in **app**.
