@@ -1,0 +1,24 @@
+{
+  "utilities": {
+    "px-3": {
+      "reason": "Blocks are page layout scope; use the 8px rhythm for horizontal spacing.",
+      "suggest": ["px-2", "px-4"]
+    },
+    "py-3": {
+      "reason": "Blocks are page layout scope; use the 8px rhythm for vertical spacing.",
+      "suggest": ["py-2", "py-4"]
+    },
+    "gap-3": {
+      "reason": "Blocks are page layout scope; use the 8px rhythm for gaps.",
+      "suggest": ["gap-2", "gap-4"]
+    },
+    "bg-red-500": {
+      "reason": "Use semantic UI8Kit color tokens instead of raw palette colors.",
+      "suggest": ["bg-destructive"]
+    },
+    "text-red-500": {
+      "reason": "Use semantic UI8Kit color tokens instead of raw palette colors.",
+      "suggest": ["text-destructive"]
+    }
+  }
+}

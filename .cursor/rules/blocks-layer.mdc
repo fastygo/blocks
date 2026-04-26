@@ -10,10 +10,21 @@ alwaysApply: true
 **Boundaries**
 - **May import** `UI8Kit` and `Elements`. **Must not** be imported by `UI8Kit` or `Elements`.
 - Product / campaign one-offs stay in **app** views, not here, unless they become a reusable family of blocks.
+- Public block APIs should describe the scene (`Title`, `Description`, `Actions`, data lists, slots), not re-export lower-level `ui.ButtonProps`, `ui.StackProps`, etc. Use UI8Kit props internally only.
+- `Class string` and small part-specific class overrides are acceptable extension points; avoid exposing every nested primitive prop.
+
+**Styling after UI8Kit explicit-class refactor**
+- Explicit Tailwind utility classes are allowed in Blocks templates. They must be validated by `ui8px` policy.
+- Blocks are normally **layout** scope: use the strict 8px rhythm (`px-2`, `px-4`, `px-6`, `gap-4`, etc.). Fine-tuning values like `px-3` belong to controls/widgets, not page layout.
+- Use UI8Kit semantic tokens (`bg-card`, `text-muted-foreground`, `border-border`, etc.); avoid raw palette classes such as `bg-red-500`.
+- Add `.ui8px/` at the repo root when Blocks has its own fixtures or CI. Map block templates and examples to layout scope.
 
 **Growth (avoid premature Elements)**
 1. Repeat inside one block → `internal/` for that block.
 2. Shared across blocks in this module → `pkg/` (or shared subpackage) in **Blocks**.
 3. Stable cross-product widget → **Elements**.
 
-**Naming:** `bl-*` or app-owned prefixes for block-scene CSS; brand-only styling stays in **app**.
+**Patterns / naming**
+- Prefer explicit utilities first. Promote repeated compositions manually after `ui8px validate patterns`.
+- Use `bl-*` for Block-owned semantic CSS only when a repeated section pattern has a stable meaning.
+- Brand-only styling, gradients, campaign art direction, and product chrome stay in **app**.

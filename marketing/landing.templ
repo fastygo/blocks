@@ -1,0 +1,268 @@
+package marketing
+
+import (
+	"strings"
+
+	t "github.com/a-h/templ"
+	ui "github.com/fastygo/ui8kit/ui"
+)
+
+type Action struct {
+	Label  string
+	Href   string
+	NewTab bool
+	Class  string
+}
+
+type FeatureItem struct {
+	Title       string
+	Description string
+	Icon        string
+}
+
+type LandingPageClasses struct {
+	Page string
+}
+
+type HeroClasses struct {
+	Section  string
+	Content  string
+	Kicker   string
+	Title    string
+	Subtitle string
+	Actions  string
+	Action   string
+}
+
+type FeatureGridClasses struct {
+	Section     string
+	Card        string
+	Title       string
+	Description string
+}
+
+type FooterClasses struct {
+	Footer string
+}
+
+type LandingPageProps struct {
+	Classes  LandingPageClasses
+	Hero     HeroProps
+	Features FeatureGridProps
+	Footer   FooterProps
+}
+
+type HeroProps struct {
+	Kicker        string
+	Title         string
+	Subtitle      string
+	PrimaryAction Action
+	Actions       []Action
+	Classes       HeroClasses
+}
+
+type FeatureGridProps struct {
+	Items   []FeatureItem
+	Classes FeatureGridClasses
+}
+
+type FooterProps struct {
+	Text    string
+	Classes FooterClasses
+}
+
+templ LandingPage(props LandingPageProps) {
+	<div class={ landingPageClass(props.Classes.Page) }>
+		@Hero(props.Hero)
+		if len(props.Features.Items) > 0 {
+			@FeatureGrid(props.Features)
+		}
+		@Footer(props.Footer)
+	</div>
+}
+
+templ Hero(props HeroProps) {
+	<section class={ heroClass(props.Classes.Section) }>
+		if strings.TrimSpace(props.Classes.Content) != "" {
+			<div class={ heroContentClass(props.Classes.Content) }>
+				@heroContent(props)
+			</div>
+		} else {
+			@heroContent(props)
+		}
+	</section>
+}
+
+templ heroContent(props HeroProps) {
+	if strings.TrimSpace(props.Kicker) != "" {
+		@ui.Text(ui.TextProps{Class: heroKickerClass(props.Classes.Kicker)}, props.Kicker)
+	}
+	@ui.Title(ui.TitleProps{Order: 1, Class: heroTitleClass(props.Classes.Title)}, props.Title)
+	if strings.TrimSpace(props.Subtitle) != "" {
+		@ui.Text(ui.TextProps{Class: heroSubtitleClass(props.Classes.Subtitle)}, props.Subtitle)
+	}
+	if hasHeroActions(props) {
+		<div class={ heroActionsClass(props.Classes.Actions) }>
+			if hasAction(props.PrimaryAction) {
+				@actionLink(props.PrimaryAction, heroActionClass(props.Classes.Action))
+			}
+			for _, action := range props.Actions {
+				if hasAction(action) {
+					@actionLink(action, heroActionClass(props.Classes.Action))
+				}
+			}
+		</div>
+	}
+}
+
+templ FeatureGrid(props FeatureGridProps) {
+	<section class={ featureGridClass(props.Classes.Section) }>
+		for _, feature := range props.Items {
+			<article class={ featureCardClass(props.Classes.Card) }>
+				<h3 class={ featureTitleClass(props.Classes.Title) }>{ feature.Title }</h3>
+				@ui.Text(ui.TextProps{Class: featureDescriptionClass(props.Classes.Description)}, feature.Description)
+			</article>
+		}
+	</section>
+}
+
+templ Footer(props FooterProps) {
+	if strings.TrimSpace(props.Text) != "" {
+		<footer class={ footerClass(props.Classes.Footer) }>{ props.Text }</footer>
+	}
+}
+
+templ actionLink(action Action, className string) {
+	if action.NewTab {
+		<a class={ actionClass(action, className) } href={ t.URL(action.Href) } target="_blank" rel="noopener noreferrer">{ action.Label }</a>
+	} else {
+		<a class={ actionClass(action, className) } href={ t.URL(action.Href) }>{ action.Label }</a>
+	}
+}
+
+func resolveClass(value, fallback string) string {
+	if strings.TrimSpace(value) != "" {
+		return value
+	}
+	return fallback
+}
+
+func landingPageClass(value string) string {
+	return resolveClass(value, defaultLandingPageClass())
+}
+
+func heroClass(value string) string {
+	return resolveClass(value, defaultHeroClass())
+}
+
+func heroKickerClass(value string) string {
+	return resolveClass(value, defaultHeroKickerClass())
+}
+
+func heroContentClass(value string) string {
+	return value
+}
+
+func heroTitleClass(value string) string {
+	return resolveClass(value, defaultHeroTitleClass())
+}
+
+func heroSubtitleClass(value string) string {
+	return resolveClass(value, defaultHeroSubtitleClass())
+}
+
+func heroActionsClass(value string) string {
+	return resolveClass(value, defaultHeroActionsClass())
+}
+
+func heroActionClass(value string) string {
+	return resolveClass(value, defaultHeroActionClass())
+}
+
+func featureGridClass(value string) string {
+	return resolveClass(value, defaultFeatureGridClass())
+}
+
+func featureCardClass(value string) string {
+	return resolveClass(value, defaultFeatureCardClass())
+}
+
+func featureTitleClass(value string) string {
+	return resolveClass(value, defaultFeatureTitleClass())
+}
+
+func featureDescriptionClass(value string) string {
+	return resolveClass(value, defaultFeatureDescriptionClass())
+}
+
+func footerClass(value string) string {
+	return resolveClass(value, defaultFooterClass())
+}
+
+func hasHeroActions(props HeroProps) bool {
+	if hasAction(props.PrimaryAction) {
+		return true
+	}
+	for _, action := range props.Actions {
+		if hasAction(action) {
+			return true
+		}
+	}
+	return false
+}
+
+func hasAction(action Action) bool {
+	return strings.TrimSpace(action.Label) != "" && strings.TrimSpace(action.Href) != ""
+}
+
+func actionClass(action Action, fallback string) string {
+	return resolveClass(action.Class, fallback)
+}
+
+func defaultLandingPageClass() string {
+	return "mx-auto flex max-w-4xl flex-col gap-12 px-4 py-16"
+}
+
+func defaultHeroClass() string {
+	return "flex flex-col gap-4 text-center"
+}
+
+func defaultHeroKickerClass() string {
+	return "text-xs font-semibold uppercase tracking-wide text-muted-foreground"
+}
+
+func defaultHeroTitleClass() string {
+	return "text-4xl font-bold tracking-tight"
+}
+
+func defaultHeroSubtitleClass() string {
+	return "text-base text-muted-foreground"
+}
+
+func defaultHeroActionsClass() string {
+	return "mt-2 flex justify-center gap-4"
+}
+
+func defaultHeroActionClass() string {
+	return "inline-flex h-12 items-center justify-center rounded-md bg-primary px-6 text-sm font-semibold text-primary-foreground shadow-sm hover:bg-accent hover:text-accent-foreground"
+}
+
+func defaultFeatureGridClass() string {
+	return "grid gap-4 md:grid-cols-3"
+}
+
+func defaultFeatureCardClass() string {
+	return "rounded-xl border border-border bg-card p-6"
+}
+
+func defaultFeatureTitleClass() string {
+	return "mb-2 text-base font-semibold"
+}
+
+func defaultFeatureDescriptionClass() string {
+	return "text-sm text-muted-foreground"
+}
+
+func defaultFooterClass() string {
+	return "mt-12 border-t border-border pt-6 text-center text-xs text-muted-foreground"
+}
