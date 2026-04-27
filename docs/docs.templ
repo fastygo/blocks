@@ -67,7 +67,7 @@ templ DocsIndex(props DocsIndexProps) {
 
 templ DocsArticle(props DocsArticleProps) {
 	@ui.Box(ui.BoxProps{Tag: "section"}) {
-		@cmp.Card(cmp.CardProps{Tag: "article"}) {
+		@cmp.Card(cmp.CardProps{Tag: "article", Class: "prose"}) {
 			@cmp.CardContent(cmp.CardContentProps{}) {
 				@t.Raw(props.HTMLContent)
 			}
@@ -78,6 +78,6 @@ templ DocsArticle(props DocsArticleProps) {
 func docItemHref(item DocListItem) string {
 	if strings.TrimSpace(item.Href) != "" {
 		return item.Href
-				}
+	}
 	return "/" + strings.TrimPrefix(item.Slug, "/")
 }

@@ -292,7 +292,7 @@ func PostArticle(props PostArticleProps) templ.Component {
 				}
 				return nil
 			})
-			templ_7745c5c3_Err = cmp.Card(cmp.CardProps{Tag: "article"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var10), templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = cmp.Card(cmp.CardProps{Tag: "article", Class: "prose"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var10), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

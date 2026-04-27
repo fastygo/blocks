@@ -72,7 +72,7 @@ templ PostList(props PostListProps) {
 
 templ PostArticle(props PostArticleProps) {
 	@ui.Stack(ui.StackProps{}) {
-		@cmp.Card(cmp.CardProps{Tag: "article"}) {
+		@cmp.Card(cmp.CardProps{Tag: "article", Class: "prose"}) {
 			@cmp.CardContent(cmp.CardContentProps{}) {
 				@t.Raw(props.HTMLContent)
 			}
