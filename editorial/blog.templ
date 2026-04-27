@@ -4,6 +4,8 @@ import (
 	"strings"
 
 	t "github.com/a-h/templ"
+	cmp "github.com/fastygo/ui8kit/components"
+	"github.com/fastygo/ui8kit/ui"
 )
 
 type PostListItem struct {
@@ -44,130 +46,39 @@ type PostArticleProps struct {
 }
 
 templ PostList(props PostListProps) {
-	<div class={ postListPageClass(props.Classes.Page) }>
-		<header class={ postListHeaderClass(props.Classes.Header) }>
-			<h1 class={ postListTitleClass(props.Classes.Title) }>{ props.Title }</h1>
+	@ui.Stack(ui.StackProps{}) {
+		@ui.Box(ui.BoxProps{Tag: "header"}) {
+			@ui.Title(ui.TitleProps{Order: 1}, props.Title)
 			if strings.TrimSpace(props.Description) != "" {
-				<p class={ postListDescriptionClass(props.Classes.Description) }>{ props.Description }</p>
+				@ui.Text(ui.TextProps{TextColor: "muted-foreground"}, props.Description)
 			}
-		</header>
-		<div class={ postListClass(props.Classes.List) }>
+		}
+		@ui.Stack(ui.StackProps{}) {
 			for _, post := range props.Posts {
-				<a class={ postCardClass(props.Classes.Card) } href={ t.URL(post.Href) }>
-					<h2 class={ postCardTitleClass(props.Classes.CardTitle) }>{ post.Title }</h2>
-					if strings.TrimSpace(post.Summary) != "" {
-						<p class={ postCardSummaryClass(props.Classes.CardSummary) }>{ post.Summary }</p>
+				<a href={ t.URL(post.Href) }>
+					@cmp.Card(cmp.CardProps{Tag: "article"}) {
+						@cmp.CardHeader(cmp.CardHeaderProps{}) {
+							@cmp.CardTitle(cmp.CardTitleProps{Order: 2}, post.Title)
+							if strings.TrimSpace(post.Summary) != "" {
+								@cmp.CardDescription(cmp.CardDescriptionProps{}, post.Summary)
+							}
+						}
 					}
 				</a>
 			}
-		</div>
-	</div>
+		}
+	}
 }
 
 templ PostArticle(props PostArticleProps) {
-	<div class={ postArticlePageClass(props.Classes.Page) }>
-		<article class={ postArticleClass(props.Classes.Article) }>
-			@t.Raw(props.HTMLContent)
-		</article>
-		if strings.TrimSpace(props.BackHref) != "" && strings.TrimSpace(props.BackLabel) != "" {
-			<p class={ postArticleBackClass(props.Classes.Back) }>
-				<a href={ t.URL(props.BackHref) }>{ props.BackLabel }</a>
-			</p>
+	@ui.Stack(ui.StackProps{}) {
+		@cmp.Card(cmp.CardProps{Tag: "article"}) {
+			@cmp.CardContent(cmp.CardContentProps{}) {
+				@t.Raw(props.HTMLContent)
+			}
 		}
-	</div>
-}
-
-func resolveClass(value, fallback string) string {
-	if strings.TrimSpace(value) != "" {
-		return value
+		if strings.TrimSpace(props.BackHref) != "" && strings.TrimSpace(props.BackLabel) != "" {
+			@ui.Button(ui.ButtonProps{Href: props.BackHref, Variant: "link"}, props.BackLabel)
+		}
 	}
-	return fallback
-}
-
-func postListPageClass(value string) string {
-	return resolveClass(value, defaultPostListPageClass())
-}
-
-func postListHeaderClass(value string) string {
-	return resolveClass(value, defaultPostListHeaderClass())
-}
-
-func postListTitleClass(value string) string {
-	return resolveClass(value, defaultPostListTitleClass())
-}
-
-func postListDescriptionClass(value string) string {
-	return resolveClass(value, defaultPostListDescriptionClass())
-}
-
-func postListClass(value string) string {
-	return resolveClass(value, defaultPostListClass())
-}
-
-func postCardClass(value string) string {
-	return resolveClass(value, defaultPostCardClass())
-}
-
-func postCardTitleClass(value string) string {
-	return resolveClass(value, defaultPostCardTitleClass())
-}
-
-func postCardSummaryClass(value string) string {
-	return resolveClass(value, defaultPostCardSummaryClass())
-}
-
-func postArticlePageClass(value string) string {
-	return resolveClass(value, defaultPostArticlePageClass())
-}
-
-func postArticleClass(value string) string {
-	return resolveClass(value, defaultPostArticleClass())
-}
-
-func postArticleBackClass(value string) string {
-	return resolveClass(value, defaultPostArticleBackClass())
-}
-
-func defaultPostListPageClass() string {
-	return "mx-auto flex max-w-3xl flex-col gap-8 px-4 py-12"
-}
-
-func defaultPostListHeaderClass() string {
-	return "space-y-2"
-}
-
-func defaultPostListTitleClass() string {
-	return "text-3xl font-bold tracking-tight"
-}
-
-func defaultPostListDescriptionClass() string {
-	return "text-base text-muted-foreground"
-}
-
-func defaultPostListClass() string {
-	return "grid gap-4"
-}
-
-func defaultPostCardClass() string {
-	return "block rounded-lg border border-border bg-card p-6 text-card-foreground no-underline transition-colors hover:border-ring"
-}
-
-func defaultPostCardTitleClass() string {
-	return "mb-2 text-lg font-semibold"
-}
-
-func defaultPostCardSummaryClass() string {
-	return "text-sm text-muted-foreground"
-}
-
-func defaultPostArticlePageClass() string {
-	return "mx-auto flex max-w-3xl flex-col gap-8 px-4 py-12"
-}
-
-func defaultPostArticleClass() string {
-	return "prose max-w-none"
-}
-
-func defaultPostArticleBackClass() string {
-	return "text-sm text-muted-foreground"
 }

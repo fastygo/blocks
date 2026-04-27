@@ -4,7 +4,8 @@ import (
 	"strings"
 
 	t "github.com/a-h/templ"
-	ui "github.com/fastygo/ui8kit/ui"
+	cmp "github.com/fastygo/ui8kit/components"
+	"github.com/fastygo/ui8kit/ui"
 )
 
 type DocListItem struct {
@@ -43,121 +44,40 @@ type DocsArticleProps struct {
 }
 
 templ DocsIndex(props DocsIndexProps) {
-	<div class={ docsIndexPageClass(props.Classes.Page) }>
-		<header class={ docsIndexHeaderClass(props.Classes.Header) }>
-			@ui.Title(ui.TitleProps{Order: 1, Class: docsIndexTitleClass(props.Classes.Title)}, props.Title)
+	@ui.Stack(ui.StackProps{}) {
+		@ui.Box(ui.BoxProps{Tag: "header"}) {
+			@ui.Title(ui.TitleProps{Order: 1}, props.Title)
 			if strings.TrimSpace(props.Description) != "" {
-				@ui.Text(ui.TextProps{Class: docsIndexDescriptionClass(props.Classes.Description)}, props.Description)
+				@ui.Text(ui.TextProps{TextColor: "muted-foreground"}, props.Description)
 			}
-		</header>
-		<div class={ docsContentCardClass(props.Classes.ContentCard) }>
-			<div class={ docsIndexGridClass(props.Classes.Grid) }>
-				for _, item := range props.Pages {
-					<a href={ t.URL(docItemHref(item)) } class={ docsIndexItemClass(props.Classes.Item) }>
-						@ui.Title(ui.TitleProps{Order: 2, Class: docsIndexItemTitleClass(props.Classes.ItemTitle)}, item.Title)
-					</a>
-				}
-			</div>
-		</div>
-	</div>
+		}
+		@ui.Grid(ui.GridProps{Cols: "3"}) {
+			for _, item := range props.Pages {
+				<a href={ t.URL(docItemHref(item)) }>
+					@cmp.Card(cmp.CardProps{Tag: "article"}) {
+						@cmp.CardHeader(cmp.CardHeaderProps{}) {
+							@cmp.CardTitle(cmp.CardTitleProps{Order: 2}, item.Title)
+						}
+					}
+				</a>
+			}
+		}
+	}
 }
 
 templ DocsArticle(props DocsArticleProps) {
-	<div class={ docsArticlePageClass(props.Classes.Page) }>
-		<div class={ docsContentCardClass(props.Classes.ContentCard) }>
-			<article class={ docsArticleClass(props.Classes.Article) }>
+	@ui.Box(ui.BoxProps{Tag: "section"}) {
+		@cmp.Card(cmp.CardProps{Tag: "article"}) {
+			@cmp.CardContent(cmp.CardContentProps{}) {
 				@t.Raw(props.HTMLContent)
-			</article>
-		</div>
-	</div>
-}
-
-func resolveClass(value, fallback string) string {
-	if strings.TrimSpace(value) != "" {
-		return value
+			}
+		}
 	}
-	return fallback
-}
-
-func docsIndexPageClass(value string) string {
-	return resolveClass(value, defaultDocsPageClass())
-}
-
-func docsArticlePageClass(value string) string {
-	return resolveClass(value, defaultDocsPageClass())
-}
-
-func docsIndexHeaderClass(value string) string {
-	return resolveClass(value, defaultDocsIndexHeaderClass())
-}
-
-func docsIndexTitleClass(value string) string {
-	return resolveClass(value, defaultDocsIndexTitleClass())
-}
-
-func docsIndexDescriptionClass(value string) string {
-	return resolveClass(value, defaultDocsDescriptionClass())
-}
-
-func docsContentCardClass(value string) string {
-	return resolveClass(value, defaultDocsContentCardClass())
-}
-
-func docsIndexGridClass(value string) string {
-	return resolveClass(value, defaultDocsIndexGridClass())
-}
-
-func docsIndexItemClass(value string) string {
-	return resolveClass(value, defaultDocsIndexItemClass())
-}
-
-func docsIndexItemTitleClass(value string) string {
-	return resolveClass(value, defaultDocsIndexItemTitleClass())
-}
-
-func docsArticleClass(value string) string {
-	return resolveClass(value, defaultDocsArticleClass())
 }
 
 func docItemHref(item DocListItem) string {
 	if strings.TrimSpace(item.Href) != "" {
 		return item.Href
-	}
+				}
 	return "/" + strings.TrimPrefix(item.Slug, "/")
-}
-
-func defaultDocsPageClass() string {
-	return "space-y-6"
-}
-
-func defaultDocsIndexHeaderClass() string {
-	return "space-y-2"
-}
-
-func defaultDocsIndexTitleClass() string {
-	return "text-2xl font-semibold tracking-tight"
-}
-
-func defaultDocsDescriptionClass() string {
-	return "text-muted-foreground"
-}
-
-func defaultDocsContentCardClass() string {
-	return "space-y-3"
-}
-
-func defaultDocsIndexGridClass() string {
-	return "grid grid-cols-1 gap-4 xl:grid-cols-3"
-}
-
-func defaultDocsIndexItemClass() string {
-	return "block rounded border border-border bg-card p-4 text-card-foreground no-underline transition-colors hover:border-ring"
-}
-
-func defaultDocsIndexItemTitleClass() string {
-	return "m-0 text-base font-medium"
-}
-
-func defaultDocsArticleClass() string {
-	return "prose max-w-none"
 }
