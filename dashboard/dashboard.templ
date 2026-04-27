@@ -8,18 +8,10 @@ import (
 	"github.com/fastygo/ui8kit/ui"
 )
 
-type PageClasses struct {
-	Page        string
-	Header      string
-	Title       string
-	Description string
-}
-
 type Action struct {
 	Label  string
 	Href   string
 	Method string
-	Class  string
 }
 
 type StatItem struct {
@@ -28,20 +20,10 @@ type StatItem struct {
 	Action Action
 }
 
-type OverviewClasses struct {
-	Page  PageClasses
-	Grid  string
-	Card  string
-	Label string
-	Value string
-	Link  string
-}
-
 type OverviewProps struct {
 	Title       string
 	Description string
 	Stats       []StatItem
-	Classes     OverviewClasses
 }
 
 type ContactField struct {
@@ -59,18 +41,6 @@ type ContactRow struct {
 	CreatedAt string
 }
 
-type ContactsClasses struct {
-	Page            PageClasses
-	Card            string
-	CardTitle       string
-	Form            string
-	Field           string
-	PrimaryButton   string
-	SecondaryButton string
-	Table           string
-	Empty           string
-}
-
 type ContactsProps struct {
 	Title            string
 	Description      string
@@ -86,19 +56,6 @@ type ContactsProps struct {
 	DeleteLabel      string
 	DeleteActionBase string
 	Rows             []ContactRow
-	Classes          ContactsClasses
-}
-
-type LoginClasses struct {
-	Shell    string
-	Card     string
-	Header   string
-	Title    string
-	Subtitle string
-	Error    string
-	Form     string
-	Field    string
-	Submit   string
 }
 
 type LoginProps struct {
@@ -109,12 +66,11 @@ type LoginProps struct {
 	EmailLabel    string
 	PasswordLabel string
 	SubmitText    string
-	Classes       LoginClasses
 }
 
 templ Overview(props OverviewProps) {
 	@ui.Stack(ui.StackProps{}) {
-		@PageHeader(props.Title, props.Description, props.Classes.Page)
+		@PageHeader(props.Title, props.Description)
 		@ui.Grid(ui.GridProps{Cols: "3"}) {
 			for _, stat := range props.Stats {
 				@cmp.Card(cmp.CardProps{Tag: "article"}) {
@@ -135,7 +91,7 @@ templ Overview(props OverviewProps) {
 
 templ Contacts(props ContactsProps) {
 	@ui.Stack(ui.StackProps{}) {
-		@PageHeader(props.Title, props.Description, props.Classes.Page)
+		@PageHeader(props.Title, props.Description)
 		@cmp.Card(cmp.CardProps{Tag: "section"}) {
 			@cmp.CardHeader(cmp.CardHeaderProps{}) {
 				@cmp.CardTitle(cmp.CardTitleProps{Order: 2}, props.AddTitle)
@@ -197,8 +153,8 @@ templ Contacts(props ContactsProps) {
 }
 
 templ LoginPanel(props LoginProps) {
-	@ui.Box(ui.BoxProps{Tag: "main"}) {
-		@cmp.Card(cmp.CardProps{}) {
+	@ui.Box(ui.BoxProps{Tag: "main", Class: "ui-auth-shell"}) {
+		@cmp.Card(cmp.CardProps{Class: "ui-auth-card"}) {
 			@cmp.CardHeader(cmp.CardHeaderProps{}) {
 				@cmp.CardTitle(cmp.CardTitleProps{Order: 1}, props.Title)
 				@cmp.CardDescription(cmp.CardDescriptionProps{}, props.Subtitle)
@@ -224,7 +180,7 @@ templ LoginPanel(props LoginProps) {
 	}
 }
 
-templ PageHeader(title string, description string, classes PageClasses) {
+templ PageHeader(title string, description string) {
 	@ui.Box(ui.BoxProps{Tag: "header"}) {
 		@ui.Title(ui.TitleProps{Order: 1}, title)
 		if strings.TrimSpace(description) != "" {

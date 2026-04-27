@@ -16,18 +16,10 @@ import (
 	"github.com/fastygo/ui8kit/ui"
 )
 
-type PageClasses struct {
-	Page        string
-	Header      string
-	Title       string
-	Description string
-}
-
 type Action struct {
 	Label  string
 	Href   string
 	Method string
-	Class  string
 }
 
 type StatItem struct {
@@ -36,20 +28,10 @@ type StatItem struct {
 	Action Action
 }
 
-type OverviewClasses struct {
-	Page  PageClasses
-	Grid  string
-	Card  string
-	Label string
-	Value string
-	Link  string
-}
-
 type OverviewProps struct {
 	Title       string
 	Description string
 	Stats       []StatItem
-	Classes     OverviewClasses
 }
 
 type ContactField struct {
@@ -67,18 +49,6 @@ type ContactRow struct {
 	CreatedAt string
 }
 
-type ContactsClasses struct {
-	Page            PageClasses
-	Card            string
-	CardTitle       string
-	Form            string
-	Field           string
-	PrimaryButton   string
-	SecondaryButton string
-	Table           string
-	Empty           string
-}
-
 type ContactsProps struct {
 	Title            string
 	Description      string
@@ -94,19 +64,6 @@ type ContactsProps struct {
 	DeleteLabel      string
 	DeleteActionBase string
 	Rows             []ContactRow
-	Classes          ContactsClasses
-}
-
-type LoginClasses struct {
-	Shell    string
-	Card     string
-	Header   string
-	Title    string
-	Subtitle string
-	Error    string
-	Form     string
-	Field    string
-	Submit   string
 }
 
 type LoginProps struct {
@@ -117,7 +74,6 @@ type LoginProps struct {
 	EmailLabel    string
 	PasswordLabel string
 	SubmitText    string
-	Classes       LoginClasses
 }
 
 func Overview(props OverviewProps) templ.Component {
@@ -153,7 +109,7 @@ func Overview(props OverviewProps) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = PageHeader(props.Title, props.Description, props.Classes.Page).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = PageHeader(props.Title, props.Description).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -300,7 +256,7 @@ func Contacts(props ContactsProps) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = PageHeader(props.Title, props.Description, props.Classes.Page).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = PageHeader(props.Title, props.Description).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -482,7 +438,7 @@ func Contacts(props ContactsProps) templ.Component {
 						var templ_7745c5c3_Var16 string
 						templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(props.NameHeader)
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 170, Col: 30}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 126, Col: 30}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 						if templ_7745c5c3_Err != nil {
@@ -495,7 +451,7 @@ func Contacts(props ContactsProps) templ.Component {
 						var templ_7745c5c3_Var17 string
 						templ_7745c5c3_Var17, templ_7745c5c3_Err = templ.JoinStringErrs(props.EmailHeader)
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 171, Col: 31}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 127, Col: 31}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var17))
 						if templ_7745c5c3_Err != nil {
@@ -508,7 +464,7 @@ func Contacts(props ContactsProps) templ.Component {
 						var templ_7745c5c3_Var18 string
 						templ_7745c5c3_Var18, templ_7745c5c3_Err = templ.JoinStringErrs(props.CompanyHeader)
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 172, Col: 33}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 128, Col: 33}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var18))
 						if templ_7745c5c3_Err != nil {
@@ -521,7 +477,7 @@ func Contacts(props ContactsProps) templ.Component {
 						var templ_7745c5c3_Var19 string
 						templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(props.CreatedHeader)
 						if templ_7745c5c3_Err != nil {
-							return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 173, Col: 33}
+							return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 129, Col: 33}
 						}
 						_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 						if templ_7745c5c3_Err != nil {
@@ -539,7 +495,7 @@ func Contacts(props ContactsProps) templ.Component {
 							var templ_7745c5c3_Var20 string
 							templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(contact.Name)
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 180, Col: 27}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 136, Col: 27}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
 							if templ_7745c5c3_Err != nil {
@@ -552,7 +508,7 @@ func Contacts(props ContactsProps) templ.Component {
 							var templ_7745c5c3_Var21 string
 							templ_7745c5c3_Var21, templ_7745c5c3_Err = templ.JoinStringErrs(contact.Email)
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 181, Col: 28}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 137, Col: 28}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var21))
 							if templ_7745c5c3_Err != nil {
@@ -565,7 +521,7 @@ func Contacts(props ContactsProps) templ.Component {
 							var templ_7745c5c3_Var22 string
 							templ_7745c5c3_Var22, templ_7745c5c3_Err = templ.JoinStringErrs(contact.Company)
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 182, Col: 30}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 138, Col: 30}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var22))
 							if templ_7745c5c3_Err != nil {
@@ -578,7 +534,7 @@ func Contacts(props ContactsProps) templ.Component {
 							var templ_7745c5c3_Var23 string
 							templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(contact.CreatedAt)
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 183, Col: 32}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 139, Col: 32}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 							if templ_7745c5c3_Err != nil {
@@ -591,7 +547,7 @@ func Contacts(props ContactsProps) templ.Component {
 							var templ_7745c5c3_Var24 templ.SafeURL
 							templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinURLErrs(t.URL(deleteAction(props.DeleteActionBase, contact.ID)))
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 185, Col: 94}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 141, Col: 94}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 							if templ_7745c5c3_Err != nil {
@@ -756,7 +712,7 @@ func LoginPanel(props LoginProps) templ.Component {
 								var templ_7745c5c3_Var32 string
 								templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinStringErrs(props.ErrorText)
 								if templ_7745c5c3_Err != nil {
-									return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 210, Col: 24}
+									return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 166, Col: 24}
 								}
 								_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var32))
 								if templ_7745c5c3_Err != nil {
@@ -792,7 +748,7 @@ func LoginPanel(props LoginProps) templ.Component {
 							var templ_7745c5c3_Var34 string
 							templ_7745c5c3_Var34, templ_7745c5c3_Err = templ.JoinStringErrs(props.ReturnTo)
 							if templ_7745c5c3_Err != nil {
-								return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 215, Col: 67}
+								return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 171, Col: 67}
 							}
 							_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var34))
 							if templ_7745c5c3_Err != nil {
@@ -846,13 +802,13 @@ func LoginPanel(props LoginProps) templ.Component {
 				}
 				return nil
 			})
-			templ_7745c5c3_Err = cmp.Card(cmp.CardProps{}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var27), templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = cmp.Card(cmp.CardProps{Class: "ui-auth-card"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var27), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = ui.Box(ui.BoxProps{Tag: "main"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var26), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = ui.Box(ui.BoxProps{Tag: "main", Class: "ui-auth-shell"}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var26), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -860,7 +816,7 @@ func LoginPanel(props LoginProps) templ.Component {
 	})
 }
 
-func PageHeader(title string, description string, classes PageClasses) templ.Component {
+func PageHeader(title string, description string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -947,7 +903,7 @@ func actionControl(action Action) templ.Component {
 				var templ_7745c5c3_Var38 templ.SafeURL
 				templ_7745c5c3_Var38, templ_7745c5c3_Err = templ.JoinURLErrs(t.URL(action.Href))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 239, Col: 50}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `dashboard/dashboard.templ`, Line: 195, Col: 50}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var38))
 				if templ_7745c5c3_Err != nil {
