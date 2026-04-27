@@ -1,0 +1,23 @@
+{
+  "defaultScope": "layout",
+  "scopes": [
+    {
+      "name": "blocks",
+      "files": [
+        "**/*.go",
+        "**/*.templ",
+        "internal/**",
+        "pkg/**"
+      ],
+      "spacing": "layout"
+    },
+    {
+      "name": "controls",
+      "files": [
+        "internal/**/controls/**",
+        "pkg/**/controls/**"
+      ],
+      "spacing": "control"
+    }
+  ]
+}

@@ -1,0 +1,278 @@
+package dashboard
+
+import (
+	"strings"
+
+	t "github.com/a-h/templ"
+	ui "github.com/fastygo/ui8kit/ui"
+)
+
+type PageClasses struct {
+	Page        string
+	Header      string
+	Title       string
+	Description string
+}
+
+type Action struct {
+	Label  string
+	Href   string
+	Method string
+	Class  string
+}
+
+type StatItem struct {
+	Label string
+	Value string
+	Action Action
+}
+
+type OverviewClasses struct {
+	Page PageClasses
+	Grid string
+	Card string
+	Label string
+	Value string
+	Link string
+}
+
+type OverviewProps struct {
+	Title       string
+	Description string
+	Stats       []StatItem
+	Classes     OverviewClasses
+}
+
+type ContactField struct {
+	Label    string
+	Name     string
+	Type     string
+	Required bool
+}
+
+type ContactRow struct {
+	ID        string
+	Name      string
+	Email     string
+	Company   string
+	CreatedAt string
+}
+
+type ContactsClasses struct {
+	Page            PageClasses
+	Card            string
+	CardTitle       string
+	Form            string
+	Field           string
+	PrimaryButton   string
+	SecondaryButton string
+	Table           string
+	Empty           string
+}
+
+type ContactsProps struct {
+	Title           string
+	Description     string
+	AddTitle        string
+	Fields          []ContactField
+	SubmitLabel     string
+	ListTitle       string
+	EmptyText       string
+	NameHeader      string
+	EmailHeader     string
+	CompanyHeader   string
+	CreatedHeader   string
+	DeleteLabel     string
+	DeleteActionBase string
+	Rows            []ContactRow
+	Classes         ContactsClasses
+}
+
+type LoginClasses struct {
+	Shell  string
+	Card   string
+	Header string
+	Title  string
+	Subtitle string
+	Error  string
+	Form   string
+	Field  string
+	Submit string
+}
+
+type LoginProps struct {
+	Title         string
+	Subtitle      string
+	ErrorText     string
+	ReturnTo      string
+	EmailLabel    string
+	PasswordLabel string
+	SubmitText    string
+	Classes       LoginClasses
+}
+
+templ Overview(props OverviewProps) {
+	<div class={ pageClass(props.Classes.Page.Page) }>
+		@PageHeader(props.Title, props.Description, props.Classes.Page)
+		<section class={ overviewGridClass(props.Classes.Grid) }>
+			for _, stat := range props.Stats {
+				<article class={ overviewCardClass(props.Classes.Card) }>
+					@ui.Text(ui.TextProps{Class: overviewLabelClass(props.Classes.Label)}, stat.Label)
+					@ui.Text(ui.TextProps{Class: overviewValueClass(props.Classes.Value)}, stat.Value)
+					@actionControl(stat.Action, overviewLinkClass(props.Classes.Link))
+				</article>
+			}
+		</section>
+	</div>
+}
+
+templ Contacts(props ContactsProps) {
+	<div class={ pageClass(props.Classes.Page.Page) }>
+		@PageHeader(props.Title, props.Description, props.Classes.Page)
+		<section class={ cardClass(props.Classes.Card) }>
+			@ui.Title(ui.TitleProps{Order: 2, Class: cardTitleClass(props.Classes.CardTitle)}, props.AddTitle)
+			<form method="post" action="/contacts" class={ formClass(props.Classes.Form) }>
+				for _, field := range props.Fields {
+					<label class={ fieldClass(props.Classes.Field) }>
+						<span>{ field.Label }</span>
+						<input type={ fieldType(field.Type) } name={ field.Name } required?={ field.Required }/>
+					</label>
+				}
+				<button type="submit" class={ primaryButtonClass(props.Classes.PrimaryButton) }>{ props.SubmitLabel }</button>
+			</form>
+		</section>
+		<section class={ cardClass(props.Classes.Card) }>
+			@ui.Title(ui.TitleProps{Order: 2, Class: cardTitleClass(props.Classes.CardTitle)}, props.ListTitle)
+			if len(props.Rows) == 0 {
+				@ui.Text(ui.TextProps{Class: emptyClass(props.Classes.Empty)}, props.EmptyText)
+			} else {
+				<table class={ tableClass(props.Classes.Table) }>
+					<thead>
+						<tr>
+							<th>{ props.NameHeader }</th>
+							<th>{ props.EmailHeader }</th>
+							<th>{ props.CompanyHeader }</th>
+							<th>{ props.CreatedHeader }</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						for _, contact := range props.Rows {
+							<tr>
+								<td>{ contact.Name }</td>
+								<td>{ contact.Email }</td>
+								<td>{ contact.Company }</td>
+								<td>{ contact.CreatedAt }</td>
+								<td>
+									<form method="post" action={ t.URL(deleteAction(props.DeleteActionBase, contact.ID)) }>
+										<button type="submit" class={ secondaryButtonClass(props.Classes.SecondaryButton) }>{ props.DeleteLabel }</button>
+									</form>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			}
+		</section>
+	</div>
+}
+
+templ LoginPanel(props LoginProps) {
+	<main class={ loginCardClass(props.Classes.Card) }>
+		<header class={ loginHeaderClass(props.Classes.Header) }>
+			@ui.Title(ui.TitleProps{Order: 1, Class: loginTitleClass(props.Classes.Title)}, props.Title)
+			@ui.Text(ui.TextProps{Class: loginSubtitleClass(props.Classes.Subtitle)}, props.Subtitle)
+		</header>
+		if strings.TrimSpace(props.ErrorText) != "" {
+			@ui.Text(ui.TextProps{Class: loginErrorClass(props.Classes.Error)}, props.ErrorText)
+		}
+		<form method="post" action="/auth/login" class={ loginFormClass(props.Classes.Form) }>
+			<input type="hidden" name="return_to" value={ props.ReturnTo }/>
+			<label class={ loginFieldClass(props.Classes.Field) }>
+				<span>{ props.EmailLabel }</span>
+				<input type="email" name="email" autocomplete="email" required/>
+			</label>
+			<label class={ loginFieldClass(props.Classes.Field) }>
+				<span>{ props.PasswordLabel }</span>
+				<input type="password" name="password" autocomplete="current-password" required/>
+			</label>
+			<button type="submit" class={ loginSubmitClass(props.Classes.Submit) }>{ props.SubmitText }</button>
+		</form>
+	</main>
+}
+
+templ PageHeader(title string, description string, classes PageClasses) {
+	<header class={ pageHeaderClass(classes.Header) }>
+		@ui.Title(ui.TitleProps{Order: 1, Class: pageTitleClass(classes.Title)}, title)
+		if strings.TrimSpace(description) != "" {
+			@ui.Text(ui.TextProps{Class: pageDescriptionClass(classes.Description)}, description)
+		}
+	</header>
+}
+
+templ actionControl(action Action, fallbackClass string) {
+	if hasAction(action) {
+		if strings.EqualFold(strings.TrimSpace(action.Method), "post") {
+			<form method="post" action={ t.URL(action.Href) }>
+				<button type="submit" class={ actionClass(action, fallbackClass) }>{ action.Label }</button>
+			</form>
+		} else {
+			<a href={ t.URL(action.Href) } class={ actionClass(action, fallbackClass) }>{ action.Label }</a>
+		}
+	}
+}
+
+func resolveClass(value, fallback string) string {
+	if strings.TrimSpace(value) != "" {
+		return value
+	}
+	return fallback
+}
+
+func pageClass(value string) string { return resolveClass(value, "space-y-8") }
+func pageHeaderClass(value string) string { return resolveClass(value, "space-y-2") }
+func pageTitleClass(value string) string { return resolveClass(value, "text-2xl font-semibold tracking-tight") }
+func pageDescriptionClass(value string) string { return resolveClass(value, "text-sm text-muted-foreground") }
+func overviewGridClass(value string) string { return resolveClass(value, "grid grid-cols-1 gap-4 xl:grid-cols-3") }
+func overviewCardClass(value string) string { return resolveClass(value, "rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm") }
+func overviewLabelClass(value string) string { return resolveClass(value, "text-xs uppercase tracking-wide text-muted-foreground") }
+func overviewValueClass(value string) string { return resolveClass(value, "text-xl font-semibold") }
+func overviewLinkClass(value string) string { return resolveClass(value, "text-sm font-medium text-primary") }
+func cardClass(value string) string { return resolveClass(value, "space-y-4 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm") }
+func cardTitleClass(value string) string { return resolveClass(value, "text-lg font-semibold") }
+func formClass(value string) string { return resolveClass(value, "grid grid-cols-1 gap-4") }
+func fieldClass(value string) string { return resolveClass(value, "flex flex-col gap-2 text-sm") }
+func primaryButtonClass(value string) string { return resolveClass(value, "inline-flex h-10 items-center justify-center rounded-md bg-primary px-5 text-sm font-semibold text-primary-foreground") }
+func secondaryButtonClass(value string) string { return resolveClass(value, "inline-flex h-10 items-center justify-center rounded-md border border-border bg-transparent px-4 text-sm font-medium text-foreground") }
+func tableClass(value string) string { return resolveClass(value, "w-full text-left text-sm") }
+func emptyClass(value string) string { return resolveClass(value, "text-sm text-muted-foreground") }
+func loginCardClass(value string) string { return resolveClass(value, "w-full max-w-sm space-y-6 rounded-xl border border-border bg-card p-6 text-card-foreground shadow-sm") }
+func loginHeaderClass(value string) string { return resolveClass(value, "space-y-2 text-center") }
+func loginTitleClass(value string) string { return resolveClass(value, "text-2xl font-semibold") }
+func loginSubtitleClass(value string) string { return resolveClass(value, "text-sm text-muted-foreground") }
+func loginErrorClass(value string) string { return resolveClass(value, "rounded-md bg-muted p-2 text-center text-sm text-destructive") }
+func loginFormClass(value string) string { return resolveClass(value, "space-y-4") }
+func loginFieldClass(value string) string { return resolveClass(value, "flex flex-col gap-2 text-sm") }
+func loginSubmitClass(value string) string { return resolveClass(value, "inline-flex h-10 w-full items-center justify-center rounded-md bg-primary text-sm font-semibold text-primary-foreground") }
+
+func fieldType(value string) string {
+	if strings.TrimSpace(value) != "" {
+		return value
+	}
+	return "text"
+}
+
+func hasAction(action Action) bool {
+	return strings.TrimSpace(action.Label) != "" && strings.TrimSpace(action.Href) != ""
+}
+
+func actionClass(action Action, fallback string) string {
+	return resolveClass(action.Class, fallback)
+}
+
+func deleteAction(base string, id string) string {
+	if strings.TrimSpace(base) == "" {
+		base = "/contacts"
+	}
+	return strings.TrimRight(base, "/") + "/" + id + "/delete"
+}

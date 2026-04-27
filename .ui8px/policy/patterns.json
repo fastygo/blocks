@@ -1,0 +1,10 @@
+{
+  "patterns": {
+    "bl-section": ["py-16"],
+    "bl-section-header": ["flex", "flex-col", "gap-4"],
+    "bl-section-title": ["text-3xl", "font-bold"],
+    "bl-section-description": ["text-muted-foreground", "leading-relaxed"],
+    "bl-card-grid": ["grid", "grid-cols-1", "gap-6"],
+    "bl-card": ["rounded-lg", "border", "border-border", "bg-card", "p-6", "shadow-sm"]
+  }
+}

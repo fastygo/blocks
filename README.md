@@ -29,7 +29,7 @@ So: **Blocks exist so product pages reuse whole sections** without each app re-i
 - **Dependencies:** Blocks may import **UI8Kit** and **Elements**. Lower layers **must not** import Blocks. See [`.cursor/rules/blocks-layer.mdc`](.cursor/rules/blocks-layer.mdc).
 - **Direct UI8Kit use is allowed** for primitives in block templates (no rule forcing every button through Elements).
 - **Growth path** (avoid premature Elements): (1) repeat inside one block → `internal/`; (2) shared across blocks in this repo → `pkg/` or a shared subpackage; (3) stable cross-product **widget** → **Elements**.
-- **Go / templ:** Same discipline as upstream — variants and props from UI8Kit/Elements; avoid raw Tailwind utility strings in library templates; use `bl-*` or app CSS for scene-level styling.
+- **Go / templ:** Same discipline as upstream — explicit utility classes are allowed, but must pass `.ui8px` policy. Use `bl-*` or app CSS for scene-level styling when a class has stable meaning.
 - **Quality:** **Integration** checks (composition, focus between regions, block-level fixtures) fit here or in apps; isolated widget a11y stays primarily in **Elements**. Cross-stack guidance: [Elements `.project/VALIDATION-AND-TOOLING.md`](https://github.com/fastygo/elements/blob/main/.project/VALIDATION-AND-TOOLING.md) (same ideas apply when you add a `Blocks/.project` later).
 
 ---
@@ -47,6 +47,10 @@ So: **Blocks exist so product pages reuse whole sections** without each app re-i
 
 **Go/templ:** named **page sections** with a clear props model — the reusable “organism” layer between design systems and the shipping application.
 
+## Packages
+
+- `marketing`: reusable marketing sections such as landing heroes, feature grids, and simple page footers. Apps can pass part-specific class hooks to keep brand CSS local while reusing the block structure.
+
 ---
 
 ## FastyGo stack
@@ -57,6 +61,35 @@ So: **Blocks exist so product pages reuse whole sections** without each app re-i
 | [**ui8kit**](https://github.com/fastygo/ui8kit) | Go/templ primitives + minimal `ui8kit` JS |
 | [**elements**](https://github.com/fastygo/elements) | Reusable widgets + APG-oriented JS |
 | [**blocks**](https://github.com/fastygo/blocks) | Page-level organisms (this repo) |
+
+---
+
+## Local development
+
+Use the cross-repo workspace when changing UI8Kit, Elements, Blocks, and Framework examples together:
+
+```bash
+cd e:/_@Go/.WorkSpace-Framework
+go work sync
+```
+
+This module uses pseudo-zero requirements with local replaces:
+
+```text
+replace github.com/fastygo/elements => ../Elements
+replace github.com/fastygo/ui8kit => ../@UI8Kit
+```
+
+Run checks from this directory. `ui8px` is intentionally not installed as a dependency; call it through `npx`:
+
+```bash
+go test ./...
+npx ui8px@latest lint ./...
+npx ui8px@latest lint ./... --learn
+npx ui8px@latest validate patterns ./...
+```
+
+Replace pseudo-zero versions with tagged releases only when publishing stable module versions.
 
 ---
 
