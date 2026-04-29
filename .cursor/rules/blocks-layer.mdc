@@ -1,30 +1,31 @@
 ---
-description: Blocks — page organisms; may use UI8Kit + Elements
+description: Blocks — copy-first page organisms built only on UI8Kit
 alwaysApply: true
 ---
 
 # Blocks
 
-**Role:** Page **organisms** — hero, pricing section, dashboard regions. Scene-specific composition and layout; may call **UI8Kit primitives directly** and **Elements** widgets.
+**Role:** Copy-first page **organisms** — hero, pricing section, dashboard regions. Blocks are design prototypes intended to be cloned into apps, then owned and adapted there.
 
 **Boundaries**
-- **May import** `UI8Kit` and `Elements`. **Must not** be imported by `UI8Kit` or `Elements`.
-- Product / campaign one-offs stay in **app** views, not here, unless they become a reusable family of blocks.
+- **May import** `UI8Kit` only. Do not import `Elements`, `Blocks`, or application packages.
+- Treat each block package as a portable source folder. It should be copyable into an app and work after `templ generate` without sibling workspace paths.
+- Product / campaign one-offs stay outside Blocks unless they become a reusable family of blocks.
 - Public block APIs should describe the scene (`Title`, `Description`, `Actions`, data lists, slots), not re-export lower-level `ui.ButtonProps`, `ui.StackProps`, etc. Use UI8Kit props internally only.
-- `Class string` and small part-specific class overrides are acceptable extension points; avoid exposing every nested primitive prop.
+- Do not expose `Class string`, `Classes` structs, or part-class override APIs.
 
 **Styling after UI8Kit explicit-class refactor**
-- Explicit Tailwind utility classes are allowed in Blocks templates. They must be validated by `ui8px` policy.
+- Use only explicit Tailwind utility classes directly in Blocks templates. Every class must be allowed by `.ui8px` policy.
 - Blocks are normally **layout** scope: use the strict 8px rhythm (`px-2`, `px-4`, `px-6`, `gap-4`, etc.). Fine-tuning values like `px-3` belong to controls/widgets, not page layout.
-- Use UI8Kit semantic tokens (`bg-card`, `text-muted-foreground`, `border-border`, etc.); avoid raw palette classes such as `bg-red-500`.
+- Use token-based Tailwind utilities such as `bg-card`, `text-muted-foreground`, and `border-border`. Avoid raw palette utilities unless `.ui8px` explicitly allows them.
 - Add `.ui8px/` at the repo root when Blocks has its own fixtures or CI. Map block templates and examples to layout scope.
+- Semantic/custom CSS classes are forbidden in Blocks.
 
 **Growth (avoid premature Elements)**
-1. Repeat inside one block → `internal/` for that block.
-2. Shared across blocks in this module → `pkg/` (or shared subpackage) in **Blocks**.
-3. Stable cross-product widget → **Elements**.
+1. Repeat inside one block → local templ helper/component in the same package.
+2. Shared across blocks → duplicate first, then extract only if the copy contract stays UI8Kit-only.
+3. Stable cross-product widget → create an **Elements** copy-first package, but do not import it from Blocks.
 
-**Patterns / naming**
-- Prefer explicit utilities first. Promote repeated compositions manually after `ui8px validate patterns`.
-- Use `bl-*` for Block-owned semantic CSS only when a repeated section pattern has a stable meaning.
-- Brand-only styling, gradients, campaign art direction, and product chrome stay in **app**.
+**Patterns**
+- Do not create named CSS patterns in Blocks. Repeated visual structure stays as explicit Tailwind utilities and must pass `.ui8px`.
+- Brand-only styling, gradients, campaign art direction, and product chrome stay outside Blocks.

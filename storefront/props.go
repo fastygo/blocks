@@ -14,14 +14,6 @@ type StorefrontPageProps struct {
 	Product     ProductPreview
 	Rail        RailProps
 	Footer      FooterProps
-	Classes     StorefrontPageClasses
-}
-
-type StorefrontPageClasses struct {
-	Page    string
-	Main    string
-	Content string
-	Rail    string
 }
 
 type HeroProps struct {

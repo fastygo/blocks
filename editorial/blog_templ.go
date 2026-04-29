@@ -22,35 +22,16 @@ type PostListItem struct {
 	Href    string
 }
 
-type PostListClasses struct {
-	Page        string
-	Header      string
-	Title       string
-	Description string
-	List        string
-	Card        string
-	CardTitle   string
-	CardSummary string
-}
-
 type PostListProps struct {
 	Title       string
 	Description string
 	Posts       []PostListItem
-	Classes     PostListClasses
-}
-
-type PostArticleClasses struct {
-	Page    string
-	Article string
-	Back    string
 }
 
 type PostArticleProps struct {
 	HTMLContent string
 	BackHref    string
 	BackLabel   string
-	Classes     PostArticleClasses
 }
 
 func PostList(props PostListProps) templ.Component {
@@ -142,7 +123,7 @@ func PostList(props PostListProps) templ.Component {
 					var templ_7745c5c3_Var5 templ.SafeURL
 					templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinURLErrs(t.URL(post.Href))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `editorial/blog.templ`, Line: 58, Col: 30}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `editorial/blog.templ`, Line: 39, Col: 30}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 					if templ_7745c5c3_Err != nil {

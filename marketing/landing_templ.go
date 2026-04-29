@@ -20,7 +20,6 @@ type Action struct {
 	Label  string
 	Href   string
 	NewTab bool
-	Class  string
 }
 
 type FeatureItem struct {
@@ -29,33 +28,7 @@ type FeatureItem struct {
 	Icon        string
 }
 
-type LandingPageClasses struct {
-	Page string
-}
-
-type HeroClasses struct {
-	Section  string
-	Content  string
-	Kicker   string
-	Title    string
-	Subtitle string
-	Actions  string
-	Action   string
-}
-
-type FeatureGridClasses struct {
-	Section     string
-	Card        string
-	Title       string
-	Description string
-}
-
-type FooterClasses struct {
-	Footer string
-}
-
 type LandingPageProps struct {
-	Classes  LandingPageClasses
 	Hero     HeroProps
 	Features FeatureGridProps
 	Footer   FooterProps
@@ -67,17 +40,14 @@ type HeroProps struct {
 	Subtitle      string
 	PrimaryAction Action
 	Actions       []Action
-	Classes       HeroClasses
 }
 
 type FeatureGridProps struct {
-	Items   []FeatureItem
-	Classes FeatureGridClasses
+	Items []FeatureItem
 }
 
 type FooterProps struct {
-	Text    string
-	Classes FooterClasses
+	Text string
 }
 
 func LandingPage(props LandingPageProps) templ.Component {

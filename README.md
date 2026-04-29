@@ -4,11 +4,11 @@
 
 ## Why Blocks exists
 
-[**UI8Kit**](https://github.com/fastygo/ui8kit) gives **atoms** and neutral layout. [**Elements**](https://github.com/fastygo/elements) gives **reusable widgets** and APG-oriented JS where the kit stops. Neither layer should carry **page-level scenes** (marketing hero, pricing grid, dashboard shell as a whole) — that would either bloat the kit or scatter the same composition across every application.
+[**UI8Kit**](https://github.com/fastygo/ui8kit) gives **atoms** and neutral layout. Blocks provide copy-first page organisms without keeping a runtime dependency on a sibling workspace.
 
-**Blocks** is where **organisms** live: coherent sections of a page with a **stable, named API** (`Hero`, `Pricing`, `Shell region`, …), composed from **UI8Kit** and **Elements**, optionally with **block-scoped** CSS (`bl-*`) for layout roles that are not generic tokens.
+**Blocks** is where **organisms** live: coherent sections of a page with a **stable, named API** (`Hero`, `Pricing`, `Shell region`, …), composed directly from **UI8Kit** primitives and design tokens.
 
-So: **Blocks exist so product pages reuse whole sections** without each app re-implementing the same wiring, markup, and primitive imports.
+So: **Blocks exist so product pages can copy whole sections** without each app re-implementing the same wiring, markup, and primitive imports.
 
 ---
 
@@ -17,19 +17,19 @@ So: **Blocks exist so product pages reuse whole sections** without each app re-i
 | Layer | Responsibility |
 |-------|----------------|
 | **UI8Kit** | Atoms + layout grammar; **Go** + minimal `ui8kit` JS. |
-| **Elements** | Complex widgets + extra APG JS; **no** page scenes. |
-| **Blocks** (this repo) | **Page organisms** — compose primitives + widgets; scene-specific props and layout. |
+| **Elements** | Copy-first widgets + extra APG JS; **no** page scenes. |
+| **Blocks** (this repo) | **Page organisms** — compose UI8Kit primitives; scene-specific props and layout. |
 | **App** | Brand, routes, data, campaigns, one-off views. |
 
 ---
 
 ## Standards (defaults)
 
-- **Scenes and composition.** Blocks wire **sections** of the UI: headers, heroes, sidebars, multi-column regions. Keep **brand-only** gradients, campaign art, and product-specific chrome in the **app** unless a pattern becomes a **reusable family** of blocks.
-- **Dependencies:** Blocks may import **UI8Kit** and **Elements**. Lower layers **must not** import Blocks. See [`.cursor/rules/blocks-layer.mdc`](.cursor/rules/blocks-layer.mdc).
+- **Scenes and composition.** Blocks wire **sections** of the UI: headers, heroes, sidebars, multi-column regions. Brand-only gradients, campaign art, and product-specific chrome do not belong here.
+- **Copy-first dependencies:** Blocks may import **UI8Kit** only. Do not import Elements, other Blocks, apps, or workspace-local packages. See [`.cursor/rules/blocks-layer.mdc`](.cursor/rules/blocks-layer.mdc).
 - **Direct UI8Kit use is allowed** for primitives in block templates (no rule forcing every button through Elements).
-- **Growth path** (avoid premature Elements): (1) repeat inside one block → `internal/`; (2) shared across blocks in this repo → `pkg/` or a shared subpackage; (3) stable cross-product **widget** → **Elements**.
-- **Go / templ:** Same discipline as upstream — explicit utility classes are allowed, but must pass `.ui8px` policy. Use `bl-*` or app CSS for scene-level styling when a class has stable meaning.
+- **Growth path:** duplicate first; extract only when the copy contract remains UI8Kit-only and portable.
+- **Go / templ:** use only explicit Tailwind utility classes that pass `.ui8px` policy. Do not ship named CSS classes, custom CSS, brand classes, or part-class override APIs from Blocks.
 - **Quality:** **Integration** checks (composition, focus between regions, block-level fixtures) fit here or in apps; isolated widget a11y stays primarily in **Elements**. Cross-stack guidance: [Elements `.project/VALIDATION-AND-TOOLING.md`](https://github.com/fastygo/elements/blob/main/.project/VALIDATION-AND-TOOLING.md) (same ideas apply when you add a `Blocks/.project` later).
 
 ---
@@ -49,7 +49,8 @@ So: **Blocks exist so product pages reuse whole sections** without each app re-i
 
 ## Packages
 
-- `marketing`: reusable marketing sections such as landing heroes, feature grids, and simple page footers. Apps can pass part-specific class hooks to keep brand CSS local while reusing the block structure.
+- `marketing`: reusable marketing sections such as landing heroes, feature grids, and simple page footers.
+- `storefront`: copy-first commerce prototype sections.
 
 ---
 
@@ -73,10 +74,9 @@ cd e:/_@Go/.WorkSpace-Framework
 go work sync
 ```
 
-This module uses pseudo-zero requirements with local replaces:
+This module uses a pseudo-zero UI8Kit requirement with a local replace:
 
 ```text
-replace github.com/fastygo/elements => ../Elements
 replace github.com/fastygo/ui8kit => ../@UI8Kit
 ```
 

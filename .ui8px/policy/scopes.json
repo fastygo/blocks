@@ -2,6 +2,16 @@
   "defaultScope": "layout",
   "scopes": [
     {
+      "name": "controls",
+      "files": [
+        "**/controls.templ",
+        "**/controls_templ.go",
+        "internal/**/controls/**",
+        "pkg/**/controls/**"
+      ],
+      "spacing": "control"
+    },
+    {
       "name": "blocks",
       "files": [
         "**/*.go",
@@ -10,14 +20,6 @@
         "pkg/**"
       ],
       "spacing": "layout"
-    },
-    {
-      "name": "controls",
-      "files": [
-        "internal/**/controls/**",
-        "pkg/**/controls/**"
-      ],
-      "spacing": "control"
     }
   ]
 }

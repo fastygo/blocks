@@ -14,35 +14,16 @@ type PostListItem struct {
 	Href    string
 }
 
-type PostListClasses struct {
-	Page        string
-	Header      string
-	Title       string
-	Description string
-	List        string
-	Card        string
-	CardTitle   string
-	CardSummary string
-}
-
 type PostListProps struct {
 	Title       string
 	Description string
 	Posts       []PostListItem
-	Classes     PostListClasses
-}
-
-type PostArticleClasses struct {
-	Page    string
-	Article string
-	Back    string
 }
 
 type PostArticleProps struct {
 	HTMLContent string
 	BackHref    string
 	BackLabel   string
-	Classes     PostArticleClasses
 }
 
 templ PostList(props PostListProps) {

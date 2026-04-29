@@ -22,33 +22,14 @@ type DocListItem struct {
 	Href  string
 }
 
-type DocsIndexClasses struct {
-	Page        string
-	Header      string
-	Title       string
-	Description string
-	ContentCard string
-	Grid        string
-	Item        string
-	ItemTitle   string
-}
-
 type DocsIndexProps struct {
 	Title       string
 	Description string
 	Pages       []DocListItem
-	Classes     DocsIndexClasses
-}
-
-type DocsArticleClasses struct {
-	Page        string
-	ContentCard string
-	Article     string
 }
 
 type DocsArticleProps struct {
 	HTMLContent string
-	Classes     DocsArticleClasses
 }
 
 func DocsIndex(props DocsIndexProps) templ.Component {
@@ -140,7 +121,7 @@ func DocsIndex(props DocsIndexProps) templ.Component {
 					var templ_7745c5c3_Var5 templ.SafeURL
 					templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinURLErrs(t.URL(docItemHref(item)))
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `docs/docs.templ`, Line: 56, Col: 38}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `docs/docs.templ`, Line: 37, Col: 38}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 					if templ_7745c5c3_Err != nil {

@@ -14,33 +14,14 @@ type DocListItem struct {
 	Href  string
 }
 
-type DocsIndexClasses struct {
-	Page        string
-	Header      string
-	Title       string
-	Description string
-	ContentCard string
-	Grid        string
-	Item        string
-	ItemTitle   string
-}
-
 type DocsIndexProps struct {
 	Title       string
 	Description string
 	Pages       []DocListItem
-	Classes     DocsIndexClasses
-}
-
-type DocsArticleClasses struct {
-	Page        string
-	ContentCard string
-	Article     string
 }
 
 type DocsArticleProps struct {
 	HTMLContent string
-	Classes     DocsArticleClasses
 }
 
 templ DocsIndex(props DocsIndexProps) {
