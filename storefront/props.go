@@ -4,6 +4,7 @@ type Action struct {
 	Label     string
 	Href      string
 	AriaLabel string
+	Icon      string
 }
 
 type StorefrontPageProps struct {

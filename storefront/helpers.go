@@ -1,8 +1,6 @@
 package storefront
 
-import (
-	"strings"
-)
+import "strings"
 
 func labelOrFallback(value string, fallback string) string {
 	if strings.TrimSpace(value) != "" {
@@ -20,4 +18,11 @@ func actionLabel(action Action) string {
 		return action.AriaLabel
 	}
 	return action.Label
+}
+
+func imageSrc(image ImageRef, fallback string) string {
+	if strings.TrimSpace(image.Src) != "" {
+		return image.Src
+	}
+	return fallback
 }
